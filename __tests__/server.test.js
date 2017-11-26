@@ -11,7 +11,7 @@ const todos = [
   },
   {
     _id: new ObjectID(),
-    text: 'Secound test todo'
+    text: 'Second test todo'
   }
 ];
 
@@ -103,6 +103,38 @@ describe('GET /todos/:id', () => {
   it('should return 404 for non-object ids', done => {
     request(app)
       .get(`/todos/123`)
+      .expect(404)
+      .end(done);
+  });
+});
+
+describe('DELETE /todos/:id', () => {
+  it('should delete todo from database', done => {
+    const id = todos[0]._id;
+    request(app)
+      .delete(`/todos/${id.toHexString()}`)
+      .expect(200)
+      .expect(res => {
+        expect(todos.length).toBe(2);
+        expect(res.body.todo.text).toBe(todos[0].text);
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+
+        Todo.find()
+          .then(todos => {
+            expect(todos.length).toBe(1);
+            done();
+          })
+          .catch(e => done(e));
+      });
+  });
+
+  it('should return 404 for non-object ids', done => {
+    request(app)
+      .delete('/todos/123')
       .expect(404)
       .end(done);
   });
