@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server/server.js",
     "test": "cross-env NODE_ENV=test jest --config=jest.config.js",
-    "test-watch": "npm test -- --watch"
+    "test-watch": "npm test -- --watchAll"
   },
   "engines": {
     "node": "9.1.0"
