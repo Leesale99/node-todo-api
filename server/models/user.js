@@ -47,7 +47,7 @@ UserSchema.methods.generateAuthToken = function() {
   const user = this;
   const access = 'auth';
   const token = jwt
-    .sign({ _id: user._id.toHexString(), access }, 'abc123')
+    .sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET)
     .toString();
 
   user.tokens.push({ access, token });
@@ -72,7 +72,7 @@ UserSchema.statics.findByToken = function(token) {
   let decoded;
 
   try {
-    decoded = jwt.verify(token, 'abc123');
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
   } catch (e) {
     return Promise.reject();
   }
